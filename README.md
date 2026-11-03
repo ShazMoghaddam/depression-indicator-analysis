@@ -1,75 +1,128 @@
-# 🧠 Adult Depression Indicator Analysis
+# Who Gets Told They Have Depression?
 
-How common is depression among adults in California, who is most affected, and has it changed? This project explores the **Adult Depression (LGHC Indicator 24)** dataset published by the [California Department of Public Health](https://www.cdph.ca.gov/) (2012–2018), then tests whether a group's year and demographics alone can flag it as a high-depression group.
+**How common depression is among adults in California from 2012 to 2018, who is most affected, and why the 2017 jump
+needs a second look.**
 
-## 🗂️ Data source and credit
+[![Checks](https://github.com/ShazMoghaddam/depression-indicator-analysis/actions/workflows/checks.yml/badge.svg)](https://github.com/ShazMoghaddam/depression-indicator-analysis/actions/workflows/checks.yml)
+[![Charts: bezel-charts](https://img.shields.io/pypi/v/bezel-charts?label=charts%3A%20bezel-charts&color=332288)](https://pypi.org/project/bezel-charts/)
+[![MIT licence](https://img.shields.io/badge/licence-MIT-CC6677)](LICENSE)
 
-- **Dataset:** [Adult Depression (LGHC Indicator)](https://catalog.data.gov/dataset/adult-depression-lghc-indicator) on DATA.GOV, hosted on the [California Health and Human Services Open Data Portal](https://data.chhs.ca.gov/)
+About 1 in 8 Californian adults had been told by a health professional that they have depression, until a sudden jump
+in 2017. This project compares groups the careful way, using the survey's own margins of error, and asks whether that
+jump is real.
+
+> **Every chart here is drawn with [bezel-charts](https://pypi.org/project/bezel-charts/), an open-source Python library
+> created by Shaz Moghaddam, the author of this project.** It turns pandas data into clean, self-contained SVG charts.
+
+---
+
+## Key findings
+
+<!-- key-findings:start -->
+### The 2017 jump looks like a change in the survey, not in people
+
+The rate held between 11.7% and 13.8% from 2012 to 2016, then rose to **19.0%** in 2017. Every one of the 22
+groups rose that same year, while the survey heard from its fewest people (8,141, against 16,354 in 2012). A real change that
+sudden and that even would be unusual, so treat 2017 and 2018 with care.
+
+![Adults ever told they have depression, by year](charts/overall-trend.svg)
+
+### Women report depression far more often than men, every year
+
+Over 2012 to 2016, 15.9% of women had been told they have depression against 9.3% of men. The gap is clear
+in all 7 years.
+
+![Women and men, by year](charts/sex-gap.svg)
+
+### Age, income and ethnicity all matter
+
+Pooling 2012 to 2016 gives each group enough answers to compare. Depression peaks at **18.0%** for 55–64 year olds,
+reaches **18.1%** in households earning under $20,000 against 9.3% at $100,000 or more, and is lowest among
+Asian and Pacific Islander adults (**5.1%**). Rose bars are clearly above all adults, green clearly below.
+
+<p>
+  <img src="charts/tile-age.svg" alt="By age: rising from 9.2 percent at 18 to 34 to 18.0 percent at 55 to 64, then 13.3 percent at 65 and over" width="330">
+  <img src="charts/tile-income.svg" alt="By income: 18.1 percent under 20 thousand dollars, 9.3 percent at 100 thousand or more" width="330">
+</p>
+<p>
+  <img src="charts/tile-education.svg" alt="By education: highest with some college at 14.6 percent, lowest with a degree at 11.0 percent" width="330">
+  <img src="charts/tile-race.svg" alt="By race and ethnicity: Asian and Pacific Islander lowest at 5.1 percent, Other highest at 20.0 percent" width="330">
+</p>
+
+### One year of data can't rank the groups
+
+In 2018 alone, none of the 10 pairs of age groups can be told apart. Pooled over five years, 9 can.
+
+![Margin of error by age, one year against five](charts/margins.svg)
+<!-- key-findings:end -->
+
+**[Read all seven findings, and what the data can't tell you →](findings/README.md)**
+
+| # | Finding | |
+|---|---|---|
+| 1 | About 1 in 8 adults | And steady until 2016 |
+| 2 | The 2017 jump looks like a change in the survey | Four warning signs |
+| 3 | Women report depression far more often | In every year |
+| 4 | Depression rises with age until 65 | Then falls |
+| 5 | Lower income, more depression | About double at the bottom |
+| 6 | Asian and Pacific Islander adults report the least | In every year |
+| 7 | One year of data can't rank the groups | And why the model was dropped |
+
+---
+
+## Run it yourself
+
+You'll need Python 3.11 or newer. The data is in the repo, so there's nothing to download.
+
+```sh
+git clone https://github.com/ShazMoghaddam/depression-indicator-analysis.git
+cd depression-indicator-analysis
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+
+python findings/build.py    # charts and report
+pytest                      # checks the data and the numbers
+```
+
+Or open [`notebooks/depression_analysis.ipynb`](notebooks/depression_analysis.ipynb) for the same analysis with the
+working shown.
+
+## What's in the repo
+
+```
+├── data/
+│   ├── adult_depression_lghc_indicator_24.csv   The published file, unchanged
+│   └── sources.json                             Where it came from
+├── findings/
+│   ├── analysis.py                              Every calculation, as small functions
+│   ├── charts.py                                Every chart
+│   ├── build.py                                 Writes the charts and the report
+│   └── README.md                                The full report
+├── notebooks/depression_analysis.ipynb
+├── charts/                                      The SVG charts
+├── assets/social-preview.png                    The image GitHub shows when the repo is shared
+├── tests/                                       Checks on the data and the findings
+└── .github/                                     Automatic checks and dependency updates
+```
+
+## Data source and credit
+
+- **Dataset:** [Adult Depression (LGHC Indicator)](https://catalog.data.gov/dataset/adult-depression-lghc-indicator) on
+  DATA.GOV, hosted on the [California Health and Human Services Open Data Portal](https://data.chhs.ca.gov/)
 - **Publisher:** California Department of Public Health (CDPH)
-- **Survey:** California Behavioral Risk Factor Surveillance Survey (BRFSS), an annual telephone survey run for CDPH by the Public Health Survey Research Program at California State University, Sacramento
-- **What it measures:** the share of adults who have ever been told by a doctor, nurse or other health professional that they have a depressive disorder
+- **Survey:** California Behavioral Risk Factor Surveillance Survey (BRFSS), an annual telephone survey run for CDPH by
+  the Public Health Survey Research Program at California State University, Sacramento
+- **What it measures:** the share of adults who have ever been told by a doctor, nurse or other health professional that
+  they have a depressive disorder
 - **Part of:** [Let's Get Healthy California](https://letsgethealthy.ca.gov/), where this is Indicator 24
 - **Licence:** [Creative Commons Attribution (CC BY)](http://www.opendefinition.org/licenses/cc-by)
 
-The data was collected and published by CDPH and the BRFSS team, and I'm grateful for their work in making it openly available. CDPH notes that its weighting uses California Department of Finance population figures rather than the U.S. Census, so the numbers may differ from national BRFSS tables. The analysis and charts in this repo are my own and are not endorsed by CDPH.
+The data was collected and published by CDPH and the BRFSS team, and I'm grateful for their work in making it openly
+available. CDPH notes that its weighting uses California Department of Finance population figures rather than the U.S.
+Census, so the numbers may differ from national BRFSS tables. The analysis and charts in this repo are my own and are
+not endorsed by CDPH.
 
-## 🔍 Key findings
-
-**About 1 in 6 adults reported depression in 2018, up from about 1 in 8 in 2012.** The rate held steady at 12–14% until 2016, then jumped in 2017. A one-year jump that size is worth checking against the survey's notes before reading it as a real change.
-
-<img src="charts/overall_trend.svg" alt="Line chart: share of adults with depression rose from 11.7% in 2012 to 17.8% in 2018, with a jump in 2017" width="680">
-
-**Women report depression far more often than men**, by roughly 5–9 percentage points every year.
-
-<img src="charts/sex_gap.svg" alt="Line chart: women's rate is higher than men's in every year from 2012 to 2018" width="680">
-
-**Rates are highest in the lowest-income households and among 55–64 year olds** (2018). The darkest bar in each tile is the highest group.
-
-<p>
-  <img src="charts/tile_age.svg" alt="Bars by age, 2018: 55 to 64 highest at 21.4%" width="330">
-  <img src="charts/tile_income.svg" alt="Bars by household income, 2018: under $20k highest at 24.3%" width="330">
-</p>
-<p>
-  <img src="charts/tile_education.svg" alt="Bars by education, 2018: some college highest at 22.3%" width="330">
-  <img src="charts/tile_race_ethnicity.svg" alt="Bars by race and ethnicity, 2018: Other highest at 26.0%, Asian/Pacific Islander lowest at 6.4%" width="330">
-</p>
-
-## 🤖 Modelling
-
-**Target:** `HighDepression` = 1 when a group's `Percent` is above the median.
-
-**Features:** only the **year** and the **group** (e.g. "Female", "$100k+"). An earlier version also used the 95% confidence limits and the case counts. Those are worked out from the answer itself, so the model could simply read it off them (target leakage). They're now left out, and the `Total` rows are dropped because they're an average of the other rows.
-
-Both models run inside a scikit-learn `Pipeline` (scaling + one-hot encoding), with a stratified 75/25 train/test split.
-
-<img src="charts/model_comparison.svg" alt="Grouped bars: logistic regression scores 0.74 accuracy and 0.88 ROC-AUC; decision tree scores 0.77 accuracy, 1.00 precision, 0.53 recall and 0.75 ROC-AUC" width="680">
-
-- **Logistic regression** is the better all-rounder (ROC-AUC 0.88).
-- **Decision tree** (depth 4) never raises a false alarm but misses about half the high-depression groups.
-- With only 154 rows, the test set is small (39 rows), so treat these scores as a rough guide.
-
-## 📊 Charts
-
-All charts are made with my Python library, [**Bezel Charts**](https://pypi.org/project/bezel-charts/) ([GitHub](https://github.com/ShazMoghaddam/bezel-charts)). They use a light, frameless style on a warm off-white background, with Paul Tol's colour-blind-safe "muted" palette: indigo `#332288`, rose `#CC6677`, green `#117733` and pale cyan `#88CCEE`. The chart code is in [`charts.py`](charts.py).
-
-## 📂 Project structure
-
-```text
-├── Adult Depression Data Analysis.ipynb   # analysis and modelling
-├── charts.py                              # Bezel Charts style and chart functions
-├── charts/                                # rendered SVG charts
-├── adult-depression-lghc-indicator-24.csv # source data
-└── requirements.txt
-```
-
-## ▶️ Run it
-
-```bash
-pip install -r requirements.txt
-jupyter notebook "Adult Depression Data Analysis.ipynb"
-```
-
-Running the notebook from top to bottom regenerates every chart in `charts/`.
+Code and content in this repo are [MIT licensed](LICENSE). The data remains subject to its publisher's terms.
 
 ---
 
