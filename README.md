@@ -1,111 +1,66 @@
 # 🧠 Adult Depression Indicator Analysis
 
-## 📘 Project Overview
-This project analyses an adult depression dataset sourced from **DATA.GOV** to explore mental health indicators and build simple predictive models.  
-As part of my data science learning journey, I applied end-to-end techniques including data cleaning, exploratory data analysis (EDA), preprocessing, modelling, evaluation, and visualisation.  
-The goal was to understand the dataset, extract meaningful insights, and build baseline predictive models suitable for a GitHub portfolio project.
+How common is depression among adults in California, who is most affected, and has it changed? This project explores the **Adult Depression: LGHC Indicator 24** dataset from [DATA.GOV](https://catalog.data.gov/) (2012–2018), then tests whether a group's year and demographics alone can flag it as a high-depression group.
+
+## 🔍 Key findings
+
+**About 1 in 6 adults reported depression in 2018, up from about 1 in 8 in 2012.** The rate held steady at 12–14% until 2016, then jumped in 2017. A one-year jump that size is worth checking against the survey's notes before reading it as a real change.
+
+<img src="charts/overall_trend.svg" alt="Line chart: share of adults with depression rose from 11.7% in 2012 to 17.8% in 2018, with a jump in 2017" width="680">
+
+**Women report depression far more often than men**, by roughly 5–9 percentage points every year.
+
+<img src="charts/sex_gap.svg" alt="Line chart: women's rate is higher than men's in every year from 2012 to 2018" width="680">
+
+**Rates are highest in the lowest-income households and among 55–64 year olds** (2018). The darkest bar in each tile is the highest group.
+
+<p>
+  <img src="charts/tile_age.svg" alt="Bars by age, 2018: 55 to 64 highest at 21.4%" width="330">
+  <img src="charts/tile_income.svg" alt="Bars by household income, 2018: under $20k highest at 24.3%" width="330">
+</p>
+<p>
+  <img src="charts/tile_education.svg" alt="Bars by education, 2018: some college highest at 22.3%" width="330">
+  <img src="charts/tile_race_ethnicity.svg" alt="Bars by race and ethnicity, 2018: Other highest at 26.0%, Asian/Pacific Islander lowest at 6.4%" width="330">
+</p>
+
+## 🤖 Modelling
+
+**Target:** `HighDepression` = 1 when a group's `Percent` is above the median.
+
+**Features:** only the **year** and the **group** (e.g. "Female", "$100k+"). An earlier version also used the 95% confidence limits and the case counts. Those are worked out from the answer itself, so the model could simply read it off them (target leakage). They're now left out, and the `Total` rows are dropped because they're an average of the other rows.
+
+Both models run inside a scikit-learn `Pipeline` (scaling + one-hot encoding), with a stratified 75/25 train/test split.
+
+<img src="charts/model_comparison.svg" alt="Grouped bars: logistic regression scores 0.74 accuracy and 0.88 ROC-AUC; decision tree scores 0.77 accuracy, 1.00 precision, 0.53 recall and 0.75 ROC-AUC" width="680">
+
+- **Logistic regression** is the better all-rounder (ROC-AUC 0.88).
+- **Decision tree** (depth 4) never raises a false alarm but misses about half the high-depression groups.
+- With only 154 rows, the test set is small (39 rows), so treat these scores as a rough guide.
+
+## 📊 Charts
+
+All charts are made with my Python library, [**Bezel Charts**](https://pypi.org/project/bezel-charts/) ([GitHub](https://github.com/ShazMoghaddam/bezel-charts)). They use a light, frameless style on a warm off-white background, with Paul Tol's colour-blind-safe "muted" palette: indigo `#332288`, rose `#CC6677`, green `#117733` and pale cyan `#88CCEE`. The chart code is in [`charts.py`](charts.py).
+
+## 📂 Project structure
+
+```text
+├── Adult Depression Data Analysis.ipynb   # analysis and modelling
+├── charts.py                              # Bezel Charts style and chart functions
+├── charts/                                # rendered SVG charts
+├── adult-depression-lghc-indicator-24.csv # source data
+└── requirements.txt
+```
+
+## ▶️ Run it
+
+```bash
+pip install -r requirements.txt
+jupyter notebook "Adult Depression Data Analysis.ipynb"
+```
+
+Running the notebook from top to bottom regenerates every chart in `charts/`.
 
 ---
 
-## 📊 Data Source
-The dataset used in this analysis comes from:
-**DATA.GOV – Adult Depression: LGHC Indicator 24**
-
-This dataset contains:
-- Weighted frequencies  
-- Percent estimates  
-- 95% confidence limits  
-- Demographic strata  
-- Time categories  
-- Other indicator metadata  
-
-I used this dataset to construct a binary depression indicator for predictive modelling.
-
----
-
-## 🛠️ Methodology
-
-### **1. Data Cleaning & Preprocessing**
-- Checked for missing values  
-- Imputed missing numeric values with *median*  
-- Imputed categorical values with *most frequently occurring value*  
-- Scaled numeric features for modelling  
-- One-hot encoded categorical variables  
-- Split the dataset using **stratified train/test split**
-
-### **2. Exploratory Data Analysis (EDA)**
-I explored:
-- Distributions of all numeric features  
-- Frequency plots of categorical variables  
-- Correlation heatmap  
-- Trend patterns across time and demographic strata  
-
-Created **publication-ready plots** for GitHub using Seaborn & Matplotlib:
-- Histograms  
-- Bar charts  
-- Correlation heatmap  
-- ROC curves  
-- Confusion matrices  
-
-### **3. Target Creation**
-A binary target variable **HighDepression** was created:
-- Value = **1** if `Percent > median(Percent)`
-- Value = **0** otherwise
-
-This allowed classification modelling.
-
-### **4. Modelling**
-Two baseline classification models were built:
-
-#### **Logistic Regression**
-- Robust linear classifier  
-- Good for interpretability  
-- Performed well with this structured dataset  
-
-#### **Decision Tree (max_depth=4)**
-- Easy to interpret visually  
-- Helps identify feature splits  
-- Visualised using Matplotlib’s `plot_tree()`  
-
-### **5. Evaluation Metrics**
-For each model:
-- Accuracy  
-- Precision  
-- Recall  
-- F1-score  
-- ROC-AUC  
-- Confusion Matrix  
-- ROC Curve  
-
-Models were wrapped in **Scikit-Learn Pipelines**, ensuring:
-- No data leakage  
-- Clean and reproducible workflow  
-
----
-
-## 🔍 Key Findings
-
-### **📌 Insights from EDA**
-- Depression estimates vary across demographic strata and time categories.  
-- Some numeric variables show moderate correlation with each other, but categorical features carry important signal when encoded.
-
-### **📌 Model Insights**
-- Logistic Regression produced stable, consistent predictive performance.  
-- Decision Tree helped reveal meaningful thresholds and splits in the data.  
-- Logistic Regression achieved slightly higher ROC-AUC, while Decision Tree offered interpretability.
-
-### **📌 What This Means**
-Even simple baseline models can capture patterns in the dataset and highlight influential features.  
-This project demonstrates the full workflow of a data science analysis—from cleaning to modelling to insights.
-
----
-
-## 📂 Project Structure
-
-👤 Author
-
-Shaz
-📍 Based in London
-🎓 Imperial College London Data Science Bootcamp Graduate
-💼 Aspiring Data Scientist & Python Developer
-🌱 Passionate about learning, analysing data, and building useful tools
+Created by **Shaz Moghaddam** · London
+[Website](https://shazmoghaddam.github.io) · [LinkedIn](https://www.linkedin.com/in/shazmoghaddam)
