@@ -1,0 +1,11 @@
+{
+  "name": "Adult Depression (LGHC Indicator 24)",
+  "published_at": "https://catalog.data.gov/dataset/adult-depression-lghc-indicator",
+  "publisher": "California Department of Public Health",
+  "survey": "California Behavioral Risk Factor Surveillance Survey, run by the Public Health Survey Research Program at California State University, Sacramento",
+  "licence": "Creative Commons Attribution (CC BY)",
+  "file": "adult_depression_lghc_indicator_24.csv, saved from adult-depression-lghc-indicator-24.csv and otherwise unchanged",
+  "covers": "California adults, 2012 to 2018, overall and by sex, age, income, education and race or ethnicity",
+  "measures": "Share of adults ever told by a health professional that they have a depressive disorder, with 95% confidence limits",
+  "caution": "Weighting uses California Department of Finance population figures, not the U.S. Census. See finding 2 on 2017."
+}
