@@ -1,6 +1,17 @@
 # 🧠 Adult Depression Indicator Analysis
 
-How common is depression among adults in California, who is most affected, and has it changed? This project explores the **Adult Depression: LGHC Indicator 24** dataset from [DATA.GOV](https://catalog.data.gov/) (2012–2018), then tests whether a group's year and demographics alone can flag it as a high-depression group.
+How common is depression among adults in California, who is most affected, and has it changed? This project explores the **Adult Depression (LGHC Indicator 24)** dataset published by the [California Department of Public Health](https://www.cdph.ca.gov/) (2012–2018), then tests whether a group's year and demographics alone can flag it as a high-depression group.
+
+## 🗂️ Data source and credit
+
+- **Dataset:** [Adult Depression (LGHC Indicator)](https://catalog.data.gov/dataset/adult-depression-lghc-indicator) on DATA.GOV, hosted on the [California Health and Human Services Open Data Portal](https://data.chhs.ca.gov/)
+- **Publisher:** California Department of Public Health (CDPH)
+- **Survey:** California Behavioral Risk Factor Surveillance Survey (BRFSS), an annual telephone survey run for CDPH by the Public Health Survey Research Program at California State University, Sacramento
+- **What it measures:** the share of adults who have ever been told by a doctor, nurse or other health professional that they have a depressive disorder
+- **Part of:** [Let's Get Healthy California](https://letsgethealthy.ca.gov/), where this is Indicator 24
+- **Licence:** [Creative Commons Attribution (CC BY)](http://www.opendefinition.org/licenses/cc-by)
+
+The data was collected and published by CDPH and the BRFSS team, and I'm grateful for their work in making it openly available. CDPH notes that its weighting uses California Department of Finance population figures rather than the U.S. Census, so the numbers may differ from national BRFSS tables. The analysis and charts in this repo are my own and are not endorsed by CDPH.
 
 ## 🔍 Key findings
 
